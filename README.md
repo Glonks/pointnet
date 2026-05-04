@@ -26,18 +26,18 @@ Evaluated on Area 6.
 
 ```bash
 # Classification
-python scripts/train_cls
+python scripts/train_cls.py
 
 # Scene segmentation
-python scripts/train_scene_seg
+python scripts/train_scene_seg.py
 ```
 
 ## Visualization
 
 ```bash
 # Classification
-python scripts/visualize_cls --checkpoint obj_class_best.pt
+python scripts/visualize_cls.py --checkpoint obj_class_best.pt
 
 # Scene segmentation
-python scripts/visualize_seg --checkpoint scene_seg_best.pt
+python scripts/visualize_seg.py --checkpoint scene_seg_best.pt
 ```
