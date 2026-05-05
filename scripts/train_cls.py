@@ -83,11 +83,11 @@ def train_one_epoch(
 
         if (i % 20 == 0) or (i == len(loader) - 1):
             logger.log({
-                'Epoch': epoch,
-                'Iteration': i,
+                'Epoch':      epoch,
+                'Iteration':  i,
                 'Total Loss': loss.item(),
                 'Class Loss': class_loss.item(),
-                'Reg. Loss': reg_loss.item(),
+                'Reg. Loss':  reg_loss.item(),
             }, overwrite=True)
 
     scheduler.step()
@@ -194,7 +194,7 @@ def main(config: Config):
         )
 
         logger.log({
-            'Epoch': epoch,
+            'Epoch':                 epoch,
             'Train/Avg. Total Loss': average_losses['total'],
             'Train/Avg. Class Loss': average_losses['class'],
             'Train/Avg. Reg. Loss':  average_losses['reg'],
@@ -207,11 +207,11 @@ def main(config: Config):
             print('New best model - Saving')
 
             torch.save({
-                'epoch': epoch,
-                'model': model.state_dict(),
+                'epoch':     epoch,
+                'model':     model.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'scheduler': scheduler.state_dict(),
-                'accuracy': best_accuracy
+                'accuracy':  best_accuracy
             }, f'{config.name}_best.pt')
 
 

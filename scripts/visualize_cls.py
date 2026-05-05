@@ -25,15 +25,11 @@ class Config:
 
 def save_gif(points, label, prediction, save_path):
     points = points.numpy().T  # (N, 3)
+    points = points - np.mean(points, axis=0)
+    points = points / np.max(np.linalg.norm(points, axis=1))
 
     figure = plt.figure()
     axis = figure.add_subplot(111, projection='3d')
-
-    # Shove into a unit ball
-    points = points - np.mean(points, axis=0)
-
-    scale = np.max(np.linalg.norm(points, axis=1))
-    points = points / scale
 
     color = 'steelblue' if label == prediction else 'red'
 
@@ -45,11 +41,8 @@ def save_gif(points, label, prediction, save_path):
         s=5,
         c=color
     )
-
     axis.set_title(f'GT: {label} | Prediction: {prediction}')
-
     axis.set_axis_off()
-
     axis.set_box_aspect([1, 1, 1])
 
     def update(frame):
@@ -87,8 +80,9 @@ def main(config: Config):
     points, labels = next(iter(loader))
     points = points.to(model.device)
 
-    logits = model(points)
-    predictions = logits.argmax(dim=1)
+    with torch.no_grad():
+        logits = model(points)
+        predictions = logits.argmax(dim=1)
 
     points = points.cpu()
     labels = labels.cpu()

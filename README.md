@@ -22,6 +22,16 @@ Evaluated on Area 6.
 
 ![Segmentation example](resources/results/scene_seg/0.gif)
 
+### Part Segmentation - ShapeNet
+
+Trained for 65 epochs instead of the full 200 epochs.
+
+| Metric | Paper | This impl |
+|--------|-------|-----------|
+| mIoU | 83.7% | 77% |
+
+![Part segmentation example](resources/results/part_seg/chair.gif)
+
 ## Training
 
 ```bash
@@ -30,14 +40,20 @@ python scripts/train_cls.py
 
 # Scene segmentation
 python scripts/train_scene_seg.py
+
+# Part segmentation
+python scripts/train_part_seg.py
 ```
 
 ## Visualization
 
 ```bash
 # Classification
-python scripts/visualize_cls.py --checkpoint obj_class_best.pt
+python scripts/visualize_cls.py
 
 # Scene segmentation
-python scripts/visualize_seg.py --checkpoint scene_seg_best.pt
+python scripts/visualize_scene_seg.py
+
+# Part segmentation
+python scripts/visualize_part_seg.py
 ```

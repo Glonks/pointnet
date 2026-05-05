@@ -1,2 +1,3 @@
 from .classification_net import ClassificationNet
 from .scene_segmentation_net import SceneSegmentationNet
+from .part_segmentation_net import PartSegmentationNet

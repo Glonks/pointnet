@@ -59,7 +59,7 @@ def train_one_epoch(
     
     losses = {
         'class': [],
-        'reg': [],
+        'reg':   [],
         'total': []
     }
     for i, (points, labels) in enumerate(loader):
@@ -84,11 +84,11 @@ def train_one_epoch(
 
         if (i % 20 == 0) or (i == len(loader) - 1):
             logger.log({
-                'Epoch': epoch,
-                'Iteration': i,
+                'Epoch':      epoch,
+                'Iteration':  i,
                 'Total Loss': loss.item(),
                 'Class Loss': class_loss.item(),
-                'Reg. Loss': reg_loss.item(),
+                'Reg. Loss':  reg_loss.item(),
             }, overwrite=True)
 
     scheduler.step()
@@ -103,12 +103,12 @@ def train_one_epoch(
 def eval_one_epoch(model, loader, epoch, logger):
     model.eval()
 
-    correct = 0
-    total = 0
-    intersection = np.zeros(S3DIS.NUM_CLASSES)
-    union = np.zeros(S3DIS.NUM_CLASSES)
+    correct       = 0
+    total         = 0
+    intersection  = np.zeros(S3DIS.NUM_CLASSES)
+    union         = np.zeros(S3DIS.NUM_CLASSES)
     class_correct = np.zeros(S3DIS.NUM_CLASSES)
-    class_total = np.zeros(S3DIS.NUM_CLASSES)
+    class_total   = np.zeros(S3DIS.NUM_CLASSES)
 
     with torch.no_grad():
         for points, labels in loader:
@@ -128,15 +128,16 @@ def eval_one_epoch(model, loader, epoch, logger):
             for cls in range(S3DIS.NUM_CLASSES):
                 predicted_cls = (predictions == cls)
                 label_cls = (labels == cls)
-                intersection[cls] += (predicted_cls & label_cls).sum().item()
-                union[cls] += (predicted_cls | label_cls).sum().item()
-                class_correct[cls] += (predictions[label_cls] == labels[label_cls]).sum().item()
-                class_total[cls] += label_cls.sum().item()
 
-    accuracy = correct / total
-    iou = intersection / np.maximum(union, 1)
-    miou = iou.mean()
-    per_class_accuracy = class_correct / np.maximum(class_total, 1)
+                intersection[cls]  += (predicted_cls & label_cls).sum().item()
+                union[cls]         += (predicted_cls | label_cls).sum().item()
+                class_correct[cls] += (predictions[label_cls] == labels[label_cls]).sum().item()
+                class_total[cls]   += label_cls.sum().item()
+
+    accuracy            = correct / total
+    iou                 = intersection / np.maximum(union, 1)
+    miou                = iou.mean()
+    per_class_accuracy  = class_correct / np.maximum(class_total, 1)
     mean_class_accuracy = per_class_accuracy.mean()
 
     return accuracy, mean_class_accuracy, miou
@@ -225,11 +226,11 @@ def main(config: Config):
             print('New best model - Saving')
 
             torch.save({
-                'epoch': epoch,
-                'model': model.state_dict(),
+                'epoch':     epoch,
+                'model':     model.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'scheduler': scheduler.state_dict(),
-                'miou': best_miou
+                'miou':      best_miou
             }, f'{config.name}_best.pt')
 
 

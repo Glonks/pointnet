@@ -39,15 +39,12 @@ COLOR_LUT = np.array([
 
 def save_gif(points, labels, predictions, save_path):
     points = points.T[:, :3] # (N, 9)
+    points = points - np.mean(points, axis=0)
+    points = points / np.max(np.linalg.norm(points, axis=1))
 
     figure = plt.figure()
     axis_gt = figure.add_subplot(121, projection='3d')
     axis_pred = figure.add_subplot(122, projection='3d')
-
-    points = points - np.mean(points, axis=0)
-
-    scale = np.max(np.linalg.norm(points, axis=1))
-    points = points / scale
 
     def scatter_by_axis(axis, colors, title):
         scatter = axis.scatter(
@@ -57,13 +54,9 @@ def save_gif(points, labels, predictions, save_path):
             s=5,
             c=colors
         )
-
         axis.set_title(title)
-
         axis.set_axis_off()
-
         axis.set_box_aspect([1, 1, 1])
-
         return scatter
 
     scatter_gt = scatter_by_axis(
@@ -139,8 +132,9 @@ def main(config: Config):
     points, labels = next(iter(loader))
     points = points.to(model.device)
 
-    logits = model(points)
-    predictions = logits.argmax(dim=1)
+    with torch.no_grad():
+        logits = model(points)
+        predictions = logits.argmax(dim=1)
 
     points = points.cpu()
     labels = labels.cpu()
